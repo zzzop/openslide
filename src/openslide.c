@@ -43,6 +43,7 @@ static const struct _openslide_format *formats[] = {
   &_openslide_format_synthetic,
   &_openslide_format_mirax,
   &_openslide_format_zeiss,
+  &_openslide_format_csp,
   &_openslide_format_dicom,
   &_openslide_format_hamamatsu_vms_vmu,
   &_openslide_format_hamamatsu_ndpi,
