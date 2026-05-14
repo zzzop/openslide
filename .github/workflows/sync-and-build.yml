@@ -9,15 +9,32 @@ on:
 
 jobs:
   sync:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Sync with Upstream
-        uses: repo-sync/github-sync@v2
-        with:
-          source_repo: "https://github.com/bryandeng/openslide.git"
-          source_branch: "vendor-csp"
-          destination_branch: "vendor-csp"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout your fork
+          uses: actions/checkout@v4
+          with:
+            ref: vendor-csp       # 切换到你的 vendor-csp 分支
+            fetch-depth: 0        # 获取所有历史记录，同步必选
+  
+        - name: Sync with Upstream
+          run: |
+            # 配置 git 用户信息
+            git config --global user.name 'GitHub Action'
+            git config --global user.email 'action@github.com'
+            
+            # 添加原作者的仓库作为远程源 (upstream)
+            git remote add upstream https://github.com/bryandeng/openslide.git
+            
+            # 拉取原作者的所有分支
+            git fetch upstream
+            
+            # 将原作者的 vendor-csp 分支合并到你的分支
+            # 如果有冲突，这里会报错，但对于 Fork 仓库通常很顺畅
+            git merge upstream/vendor-csp
+            
+            # 推送更新回你的 GitHub 仓库
+            git push origin vendor-csp
 
   build-linux:
     needs: sync # 等同步完成后再开始编译
