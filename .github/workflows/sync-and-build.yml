@@ -6,6 +6,8 @@ on:
   workflow_dispatch:      # 允许你点击按钮手动触发
   push:
     branches: [ vendor-csp ] # 当代码有变动时触发
+permissions:
+  contents: write
 
 jobs:
   sync:
